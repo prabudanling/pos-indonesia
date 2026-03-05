@@ -441,7 +441,7 @@ const EkosistemBUMNSection = () => {
             transition={{ duration: 0.3 }}
           >
             <img
-              src="/upload/super%20holding%20interconnecting.jpeg"
+              src="/images/super-holding-interconnecting.jpeg"
               alt="Ekosistem BUMN Terintegrasi"
               className="w-full h-full object-cover"
             />
