@@ -13,19 +13,21 @@ import {
 const ParticlesBackground = () => {
   const [mounted, setMounted] = useState(false);
   // Store particles in state to avoid hydration issues
-  const [particles, setParticles] = useState<Array<{x: number, y: number, scale: number, duration: number, moveX: number, moveY: number}>>([]);
+  const [particles, setParticles] = useState<Array<{x: number, y: number, scale: number, duration: number, moveX: number, moveY: number, size: number}>>([]);
 
   useEffect(() => {
     if (!mounted) {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      const newParticles = [...Array(30)].map(() => ({
+      // Increased particles from 30 to 50 for more visual richness
+      const newParticles = [...Array(50)].map(() => ({
         x: Math.random() * width,
         y: Math.random() * height,
         scale: Math.random() * 0.5 + 0.5,
-        duration: Math.random() * 10 + 10,
-        moveX: Math.random() * 500 - 250,
-        moveY: Math.random() * 500 - 250,
+        duration: Math.random() * 15 + 8,
+        moveX: Math.random() * 600 - 300,
+        moveY: Math.random() * 600 - 300,
+        size: Math.random() * 3 + 1,
       }));
       // Using setTimeout to avoid setState in effect warning
       const timer = setTimeout(() => {
@@ -40,11 +42,16 @@ const ParticlesBackground = () => {
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      {/* Enhanced Floating Particles */}
       {particles.map((particle, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 rounded-full"
-          style={{ background: i % 3 === 0 ? 'rgba(196, 30, 58, 0.4)' : i % 3 === 1 ? 'rgba(234, 88, 12, 0.4)' : 'rgba(249, 115, 22, 0.3)' }}
+          className="absolute rounded-full"
+          style={{ 
+            width: particle.size,
+            height: particle.size,
+            background: i % 4 === 0 ? 'rgba(196, 30, 58, 0.5)' : i % 4 === 1 ? 'rgba(234, 88, 12, 0.4)' : i % 4 === 2 ? 'rgba(249, 115, 22, 0.35)' : 'rgba(251, 146, 60, 0.3)' 
+          }}
           initial={{
             x: particle.x,
             y: particle.y,
@@ -53,44 +60,84 @@ const ParticlesBackground = () => {
           animate={{
             x: [null, particle.moveX],
             y: [null, particle.moveY],
-            opacity: [0.3, 0.7, 0.3],
+            opacity: [0.2, 0.8, 0.2],
+            scale: [particle.scale, particle.scale * 1.5, particle.scale],
           }}
           transition={{
             duration: particle.duration,
             repeat: Infinity,
             repeatType: "reverse",
+            ease: "easeInOut",
           }}
         />
       ))}
-      {/* Floating Orbs - Red/Orange on White */}
+      
+      {/* Floating Orbs - Red/Orange on White - Enhanced with more orbs */}
       <motion.div
-        className="absolute w-96 h-96 rounded-full blur-3xl"
+        className="absolute w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full blur-3xl"
         animate={{
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-          scale: [1, 1.2, 1],
+          x: [0, 100, 50, 0],
+          y: [0, -50, 30, 0],
+          scale: [1, 1.2, 1.1, 1],
         }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         style={{ top: "10%", left: "10%", background: 'rgba(196, 30, 58, 0.08)' }}
       />
       <motion.div
-        className="absolute w-80 h-80 rounded-full blur-3xl"
+        className="absolute w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full blur-3xl"
         animate={{
-          x: [0, -80, 0],
-          y: [0, 80, 0],
-          scale: [1, 1.3, 1],
+          x: [0, -80, -40, 0],
+          y: [0, 80, 40, 0],
+          scale: [1, 1.3, 1.15, 1],
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         style={{ bottom: "20%", right: "15%", background: 'rgba(234, 88, 12, 0.08)' }}
       />
       <motion.div
-        className="absolute w-64 h-64 rounded-full blur-3xl"
+        className="absolute w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full blur-3xl"
         animate={{
-          x: [0, 60, 0],
-          y: [0, -60, 0],
+          x: [0, 60, 30, 0],
+          y: [0, -60, -30, 0],
+          scale: [1, 1.15, 1.08, 1],
         }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         style={{ top: "50%", left: "60%", background: 'rgba(249, 115, 22, 0.06)' }}
+      />
+      
+      {/* Additional floating orbs for more visual depth */}
+      <motion.div
+        className="absolute w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full blur-3xl"
+        animate={{
+          x: [0, 70, 35, 0],
+          y: [0, -40, -20, 0],
+          scale: [1, 1.25, 1.1, 1],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        style={{ top: "30%", right: "25%", background: 'rgba(239, 68, 68, 0.05)' }}
+      />
+      <motion.div
+        className="absolute w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full blur-3xl"
+        animate={{
+          x: [0, -50, -25, 0],
+          y: [0, 70, 35, 0],
+          scale: [1, 1.2, 1.05, 1],
+        }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+        style={{ bottom: "40%", left: "20%", background: 'rgba(245, 158, 11, 0.05)' }}
+      />
+      
+      {/* Wave-like gradient animation */}
+      <motion.div
+        className="absolute inset-0 opacity-30"
+        animate={{
+          background: [
+            'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(196, 30, 58, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 50% at 80% 60%, rgba(234, 88, 12, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 50% at 50% 80%, rgba(249, 115, 22, 0.03) 0%, transparent 50%)',
+            'radial-gradient(ellipse 80% 50% at 20% 40%, rgba(196, 30, 58, 0.03) 0%, transparent 50%)',
+          ]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );
@@ -209,95 +256,121 @@ const ExecutiveSummarySection = () => {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden bg-white">
+    <section className="relative py-16 sm:py-20 md:py-24 lg:py-32 overflow-hidden bg-white">
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-white via-orange-50/30 to-red-50/20" />
         <motion.div
-          className="absolute top-1/4 left-1/4 w-64 h-64 bg-red-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.5, 0.3] }}
+          className="absolute top-1/4 left-1/4 w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 bg-red-500/10 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.5, 0.3], x: [0, 20, 0], y: [0, -20, 0] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+          className="absolute bottom-1/4 right-1/4 w-36 sm:w-44 md:w-48 h-36 sm:h-44 md:h-48 bg-orange-500/10 rounded-full blur-3xl"
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3], x: [0, -15, 0], y: [0, 15, 0] }}
           transition={{ duration: 10, repeat: Infinity }}
+        />
+        {/* Additional floating orb */}
+        <motion.div
+          className="absolute top-1/2 right-1/3 w-32 sm:w-40 md:w-48 h-32 sm:h-40 md:h-48 bg-amber-500/5 rounded-full blur-3xl"
+          animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 12, repeat: Infinity, delay: 2 }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
         >
           <motion.div
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass mb-6"
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full glass mb-4 sm:mb-6"
+            initial={{ scale: 0, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 200 }}
+            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
           >
-            <Star className="w-5 h-5 text-orange-500 animate-spin" style={{ animationDuration: "3s" }} />
-            <span className="font-semibold text-orange-500">EXECUTIVE SUMMARY</span>
+            <Star className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 animate-spin" style={{ animationDuration: "3s" }} />
+            <span className="font-semibold text-sm sm:text-base text-orange-500">EXECUTIVE SUMMARY</span>
           </motion.div>
 
-          <h2 className="text-4xl md:text-6xl font-black mb-6">
+          <motion.h2
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+          >
             <span className="gradient-text">Mega Blueprint Transformasi</span>
-          </h2>
+          </motion.h2>
           
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-slate-700 leading-relaxed">
+          <motion.div
+            className="max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <p className="text-base sm:text-lg md:text-xl text-slate-700 leading-relaxed">
               <TypewriterText 
                 text="Menjadikan PT POS Indonesia sebagai Super Holding Logistik Pan-Asia: Pemimpin End-to-End Multimodal Logistics (Darat, Udara, Laut, Digital, Keuangan) dengan Revenue USD 50 Miliar dan Market Cap USD 120 Miliar — sejajar DHL, FedEx, dan SF Express."
                 delay={500}
                 speed={20}
               />
             </p>
-          </div>
+          </motion.div>
         </motion.div>
 
-        {/* Key Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        {/* Key Stats - Enhanced with staggered animations and glow effects */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-8 sm:mb-12 md:mb-16">
           {keyPoints.map((point, index) => (
             <motion.div
               key={index}
-              className="glass rounded-2xl p-6 text-center relative overflow-hidden group"
-              initial={{ opacity: 0, y: 50, rotateX: 45 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15, type: "spring" }}
-              whileHover={{ scale: 1.05, y: -10 }}
+              className="glass rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-center relative overflow-hidden group cursor-pointer"
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: index * 0.15, type: "spring", stiffness: 100 }}
+              whileHover={{ scale: 1.05, y: -8, boxShadow: "0 20px 40px -15px rgba(239, 68, 68, 0.2)" }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               />
               <motion.div
-                className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mx-auto mb-4"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg shadow-red-500/20"
                 whileHover={{ rotate: 360, scale: 1.2 }}
                 transition={{ duration: 0.6 }}
               >
-                <point.icon className="w-6 h-6 text-white" />
+                <point.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </motion.div>
-              <div className="text-3xl font-black text-slate-800 mb-1">{point.value}</div>
-              <div className="text-sm text-slate-600">{point.title}</div>
-              <div className="text-xs text-orange-500 font-semibold mt-2">{point.year}</div>
+              <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-slate-800 mb-1">{point.value}</div>
+              <div className="text-xs sm:text-sm text-slate-600">{point.title}</div>
+              <div className="text-xs text-orange-500 font-semibold mt-1 sm:mt-2">{point.year}</div>
             </motion.div>
           ))}
         </div>
 
         {/* Why POS Indonesia - Updated with Kecamatan & Desa */}
         <motion.div
-          className="glass rounded-3xl p-8 md:p-12"
+          className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-8 gradient-text">
+          <motion.h3
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-6 sm:mb-8 gradient-text"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
             Mengapa POS Indonesia?
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+          </motion.h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {[
               { title: "279 Tahun", subtitle: "Sejarah", desc: "Modal sosial tak ternilai", icon: Calendar },
               { title: "4.000+", subtitle: "Kantor Pos", desc: "Infrastruktur terluas", icon: Building2 },
@@ -308,17 +381,22 @@ const ExecutiveSummarySection = () => {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                className="p-4 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 hover:from-red-100 hover:to-orange-100 transition-all border border-red-100"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="p-3 sm:p-4 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 hover:from-red-100 hover:to-orange-100 transition-all duration-300 border border-red-100 group cursor-pointer"
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ scale: 1.05, y: -5 }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                whileHover={{ scale: 1.05, y: -5, boxShadow: "0 10px 25px -10px rgba(239, 68, 68, 0.15)" }}
               >
-                <item.icon className="w-7 h-7 text-red-500 mb-2" />
-                <div className="text-2xl font-black text-slate-800">{item.title}</div>
-                <div className="text-sm font-semibold text-orange-500">{item.subtitle}</div>
-                <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
+                <motion.div
+                  className="mb-2"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <item.icon className="w-6 h-6 sm:w-7 sm:h-7 text-red-500" />
+                </motion.div>
+                <div className="text-lg sm:text-xl md:text-2xl font-black text-slate-800">{item.title}</div>
+                <div className="text-xs sm:text-sm font-semibold text-orange-500">{item.subtitle}</div>
+                <p className="text-xs text-slate-500 mt-1 hidden sm:block">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -1742,29 +1820,43 @@ const HeroSection = () => {
       
       {/* Grid Pattern */}
       <div 
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-20 sm:opacity-30"
         style={{
           backgroundImage: `linear-gradient(rgba(196, 30, 58, 0.1) 1px, transparent 1px),
                            linear-gradient(90deg, rgba(196, 30, 58, 0.1) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
+          backgroundSize: '40px 40px sm:50px sm:50px'
         }}
       />
+      
+      {/* Animated gradient orbs */}
+      <motion.div
+        className="absolute w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full blur-3xl opacity-30"
+        style={{ top: "15%", left: "5%", background: 'rgba(196, 30, 58, 0.1)' }}
+        animate={{ scale: [1, 1.2, 1], x: [0, 30, 0], y: [0, -20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute w-40 h-40 sm:w-56 sm:h-56 md:w-72 md:h-72 rounded-full blur-3xl opacity-30"
+        style={{ bottom: "10%", right: "10%", background: 'rgba(234, 88, 12, 0.1)' }}
+        animate={{ scale: [1.1, 1, 1.1], x: [0, -25, 0], y: [0, 25, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      <motion.div style={{ y, opacity }} className="relative z-10 text-center px-4 max-w-7xl mx-auto">
+      <motion.div style={{ y, opacity }} className="relative z-10 text-center px-4 sm:px-6 max-w-7xl mx-auto">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass mb-8"
+          className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 rounded-full glass mb-6 sm:mb-8"
         >
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           >
-            <Star className="w-5 h-5 text-amber-500" />
+            <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
           </motion.div>
-          <span className="text-sm md:text-base font-medium text-slate-700">
+          <span className="text-xs sm:text-sm md:text-base font-medium text-slate-700">
             BUMN Tertua Indonesia — Est. 26 Agustus 1746
           </span>
         </motion.div>
@@ -1776,7 +1868,7 @@ const HeroSection = () => {
           transition={{ duration: 1, delay: 0.2 }}
         >
           <motion.h1
-            className="text-5xl md:text-7xl lg:text-8xl font-black mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black mb-4 sm:mb-6"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.8, type: "spring" }}
@@ -1785,7 +1877,7 @@ const HeroSection = () => {
           </motion.h1>
           
           <motion.h2
-            className="text-2xl md:text-4xl lg:text-5xl font-bold text-slate-800 mb-4"
+            className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-slate-800 mb-3 sm:mb-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -1794,14 +1886,14 @@ const HeroSection = () => {
           </motion.h2>
           
           <motion.div
-            className="h-1 w-48 md:w-64 mx-auto bg-gradient-to-r from-transparent via-red-600 to-transparent rounded-full my-8"
+            className="h-1 w-32 sm:w-48 md:w-64 mx-auto bg-gradient-to-r from-transparent via-red-600 to-transparent rounded-full my-4 sm:my-6 md:my-8"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.6, duration: 1 }}
           />
           
           <motion.p
-            className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-8"
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 max-w-3xl mx-auto mb-6 sm:mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
@@ -2844,52 +2936,108 @@ const DewanPakarSection = () => {
   );
 };
 
+// ============== SCROLL PROGRESS INDICATOR ==============
+const ScrollProgress = () => {
+  const { scrollYProgress } = useScroll();
+  
+  return (
+    <motion.div
+      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-orange-500 to-red-500 origin-left z-50"
+      style={{ scaleX: scrollYProgress }}
+    />
+  );
+};
+
+// ============== BACK TO TOP BUTTON ==============
+const BackToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 500) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-red-500 to-orange-500 text-white shadow-lg flex items-center justify-center hover:shadow-xl transition-shadow"
+          whileHover={{ scale: 1.1, rotate: 360 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+        >
+          <ChevronDown className="w-6 h-6 rotate-180" />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // ============== FOOTER ==============
 const Footer = () => {
   return (
-    <footer className="relative py-16 border-t border-red-100 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          <div className="md:col-span-2">
+    <footer className="relative py-12 sm:py-16 border-t border-red-100 bg-gradient-to-b from-white to-red-50/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12">
+          <div className="sm:col-span-2 lg:col-span-2">
             <motion.h3
-              className="text-3xl font-black gradient-text mb-4"
+              className="text-2xl sm:text-3xl font-black gradient-text mb-3 sm:mb-4"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
               POS INDONESIA
             </motion.h3>
-            <p className="text-slate-600 mb-4">
+            <p className="text-sm sm:text-base text-slate-600 mb-4">
               Super Holding Logistik Nasional — Transformasi menuju Raksasa Logistik Asia 2045
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               <motion.div
-                className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-500/20 flex items-center justify-center"
                 whileHover={{ scale: 1.2, rotate: 360 }}
                 transition={{ duration: 0.5 }}
               >
-                <Globe className="w-5 h-5 text-red-500" />
+                <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
               </motion.div>
               <motion.div
-                className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-amber-500/20 flex items-center justify-center"
                 whileHover={{ scale: 1.2, rotate: 360 }}
                 transition={{ duration: 0.5 }}
               >
-                <Package className="w-5 h-5 text-orange-500" />
+                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
               </motion.div>
               <motion.div
-                className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-emerald-500/20 flex items-center justify-center"
                 whileHover={{ scale: 1.2, rotate: 360 }}
                 transition={{ duration: 0.5 }}
               >
-                <Leaf className="w-5 h-5 text-emerald-400" />
+                <Leaf className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
               </motion.div>
             </div>
           </div>
 
           <div>
-            <h4 className="font-bold text-slate-800 mb-4">8 Pilar Bisnis</h4>
-            <ul className="space-y-2 text-slate-800/70">
+            <h4 className="font-bold text-slate-800 mb-3 sm:mb-4 text-sm sm:text-base">8 Pilar Bisnis</h4>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-800/70">
               <li className="hover:text-red-500 transition-colors cursor-pointer">POS Darat</li>
               <li className="hover:text-red-500 transition-colors cursor-pointer">POS Udara</li>
               <li className="hover:text-red-500 transition-colors cursor-pointer">POS Laut</li>
@@ -2898,29 +3046,29 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold text-slate-800 mb-4">Informasi</h4>
-            <ul className="space-y-2 text-slate-800/70">
+            <h4 className="font-bold text-slate-800 mb-3 sm:mb-4 text-sm sm:text-base">Informasi</h4>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-slate-800/70">
               <li className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                 Est. 26 Agustus 1746
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
                 Jakarta, Indonesia
               </li>
               <li className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
+                <Users className="w-3 h-3 sm:w-4 sm:h-4" />
                 24.000+ Karyawan
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-red-100 pt-8 text-center">
-          <p className="text-slate-500 text-sm">
+        <div className="border-t border-red-100 pt-6 sm:pt-8 text-center">
+          <p className="text-slate-500 text-xs sm:text-sm">
             © 2025 PT POS Indonesia Holdings. Mega Blueprint 2025-2045.
             <br />
-            <span className="text-orange-500">Dari Abad ke Abad, Dari Hati ke Hati</span>
+            <span className="text-orange-500 font-medium">Dari Abad ke Abad, Dari Hati ke Hati</span>
           </p>
         </div>
       </div>
@@ -2930,8 +3078,22 @@ const Footer = () => {
 
 // ============== MAIN PAGE ==============
 export default function HomePage() {
+  // Add smooth scroll behavior on mount
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth';
+    return () => {
+      document.documentElement.style.scrollBehavior = 'auto';
+    };
+  }, []);
+
   return (
-    <main className="relative min-h-screen bg-white text-slate-900 overflow-x-hidden">
+    <main className="relative min-h-screen bg-white text-slate-900 overflow-x-hidden scroll-smooth">
+      {/* Scroll Progress */}
+      <ScrollProgress />
+      
+      {/* Back to Top Button */}
+      <BackToTop />
+      
       <ParticlesBackground />
       
       {/* Hero */}
